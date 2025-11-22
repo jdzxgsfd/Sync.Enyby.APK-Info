@@ -14,8 +14,8 @@ jobs:
     strategy:
       matrix:
         include:
-          # 程序1：SoftwareDownloader
-          - program_base: "SoftwareDownloader"
+          # 程序1：Sync
+          - program_base: "Sync"
             index: 0
             last_index: 0
                       
@@ -30,20 +30,20 @@ jobs:
       - name: 导出标签到tags.txt
         run: |
           # 使用git tag命令获取所有标签（按字母顺序），并写入tags.txt
-          git tag > SoftwareDownloader.AllTags.txt
+          git tag > Sync.AllTags.txt
         shell: bash  # 指定使用bash shell执行命令（确保跨环境兼容性）
       
-      # 步骤：运行SoftwareDownloader.exe
-      - name: Run SoftwareDownloader.exe
+      # 步骤：运行Sync.exe
+      - name: Run Sync.exe
         run: |
-          .\SoftwareDownloader.exe
+          .\Sync.exe
         working-directory: ${{ github.workspace }}  # 仓库根目录
 
-      # 步骤：读取SoftwareDownloader.tag.txt内容
+      # 步骤：读取Sync.tag.txt内容
       - name: Read version tag from file
         id: read_version
         run: |
-          $version = Get-Content .\SoftwareDownloader.tag.txt -Raw
+          $version = Get-Content .\Sync.tag.txt -Raw
           $version = $version.Trim()  # 移除空白字符（包括换行符）
           echo "version_tag=$version" >> $env:GITHUB_OUTPUT
         working-directory: ${{ github.workspace }}
@@ -52,7 +52,7 @@ jobs:
       - name: Check if version is empty
         if: steps.read_version.outputs.version_tag == ''
         run: |
-          Write-Error "SoftwareDownloader.tag.txt is empty. Exiting workflow."
+          Write-Error "Sync.tag.txt is empty. Exiting workflow."
           exit 1
   
       # 步骤：检查标签是不是已存在
